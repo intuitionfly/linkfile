@@ -1,3 +1,21 @@
-<div class="page-header">
-  <h1>Encode & CVS Link Convertor <small>Welcome</small></h1>
+<div class="jumbotron">
+  <div class="container">
+    <h1>Encode & CVS Link Convertor </h1>
+  <p>Welcome to Encode & CVS Link Convertor, please contact support team if you found any issue.</p>
+  </div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="list-group col-md-4" ng-repeat="project in projects">
+		  <a href="#/project/{{project.projectId}}" class="list-group-item">
+			{{project.projectId}}
+		  </a>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<nav class="navbar navbar-default navbar-fixed-bottom">
+		<p class="text-muted credit" style="padding: 10px;">Designed by Xuthus Yang</p>
+	</nav>
 </div>
