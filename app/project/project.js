@@ -7,6 +7,25 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 } ])
 .controller('ProjectCtrl', ['$scope', '$routeParams', 'Project',
 	function($scope, $routeParams, Project) {
+		$scope.funcNames = [{
+			"funcName" : "CVStoLink",
+			"filterName" : "liu.wu@cn.premiumit.com"
+		}, {
+			"funcName" : "UniCode",
+			"filterName" : "liu.wu@cn.premiumit.com"
+		}, {
+			"funcName" : "ASCII",
+			"filterName" : "liu.wu@cn.premiumit.com"
+		}, {
+			"funcName" : "ReConvert",
+			"filterName" : "liu.wu@cn.premiumit.com"
+		}];
+		
+		$scope.setFuncName = function (funcName){
+			$scope.funcName = funcName;
+		}
+		
+		$scope.funcName = $scope.funcNames[0].funcName;
 		$scope.projects = Project.query(function() {
 			$scope.projectId = "";
 			for (var i = 0; i < $scope.projects.length; i++) {
@@ -21,4 +40,5 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 				window.location = "#/welcome";
 			}
 		});
+		
 	} ]);
