@@ -1,11 +1,24 @@
 <div class="page-header">
   <h1>Encode & CVS Link Convertor <small>{{projectId}}</small></h1>
 </div>
-
-	<div class="btn-group" role="group" aria-label="funcBand" ng-repeat="fn in funcNames">
-	  <button type="button" class="btn btn-default" ng-click="setFuncName(fn.funcName)">{{fn.funcName}}</button>
+<div class="container">
+	<div class="row">
+		<div class="btn-group " role="group" aria-label="funcBand" ng-repeat="fn in funcNames">
+		  <button type="button" class="btn btn-default" ng-click="setFuncName(fn.funcName)">{{fn.funcName}}</button>
+		</div>
 	</div>
-{{funcName}}
+	<div class="row">
+		<textarea name="input" id="input" width="100%" rows="10" ng-model="inputtext" value="{{inputtext}}" class="col-xs-12" ng-change="convertText()"></textarea>
+	</div>
+	<div class="row">
+		<div class="label label-primary">{{funcName}}</div>
+	</div>
+	<div class="row">
+		<textarea name="output" id="output" width="100%" rows="10" ng-model="outputtext" value="{{outputtext}}" class="col-xs-12" readonly="true"></textarea>
+	</div>
+</div>
+
+
 <div class="container">
 	<nav class="navbar navbar-default navbar-fixed-bottom">
 		<p class="text-muted credit" style="padding: 10px;">Designed by Xuthus Yang</p>
