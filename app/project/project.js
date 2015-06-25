@@ -8,25 +8,26 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 .controller('ProjectCtrl', ['$scope', '$routeParams', 'Project',
 	function($scope, $routeParams, Project) {
 		$scope.funcNames = [{
-			"funcName" : "CVStoLink",
-			"filterName" : "liu.wu@cn.premiumit.com"
+			"funcName" : "CVStoLink"
 		}, {
-			"funcName" : "UniCode",
-			"filterName" : "liu.wu@cn.premiumit.com"
+			"funcName" : "UniCode"
 		}, {
-			"funcName" : "ASCII",
-			"filterName" : "liu.wu@cn.premiumit.com"
+			"funcName" : "ASCII"
 		}, {
-			"funcName" : "ReConvert",
-			"filterName" : "liu.wu@cn.premiumit.com"
+			"funcName" : "ReConvert"
 		}];
 		
 		$scope.setFuncName = function (funcName){
 			$scope.funcName = funcName;
+			if(funcName == "CVStoLink"){
+				$scope.isCVStoLink = true;
+			} else {
+				$scope.isCVStoLink = false;
+			}
 		}
 		
 		$scope.funcName = $scope.funcNames[0].funcName;
-		
+		$scope.isCVStoLink = true;
 		$scope.projects = Project.query(function() {
 			$scope.projectId = "";
 			for (var i = 0; i < $scope.projects.length; i++) {
@@ -59,6 +60,9 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 				$scope.outputtext = reconvert($scope.inputtext);
 				break;
 			}
+		}
+		$scope.submitLink = function(){
+			
 		}
 	} ]);
 

@@ -1,5 +1,7 @@
-<div class="page-header">
-  <h1>Encode & CVS Link Convertor <small>{{projectId}}</small></h1>
+<div class="container">
+	<div class="page-header">
+	  <h1>Encode & CVS Link Convertor <small>{{projectId}}</small></h1>
+	</div>
 </div>
 <div class="container">
 	<div class="row">
@@ -16,8 +18,22 @@
 	<div class="row">
 		<textarea name="output" id="output" width="100%" rows="10" ng-model="outputtext" value="{{outputtext}}" class="col-xs-12" readonly="true"></textarea>
 	</div>
+	<div class="row" ng-show="isCVStoLink">
+		<div class="col-xs-4 form-group">
+			<label for="submitter">Submitter:</label>
+    		<input type="text" class="form-control" id="submitter" placeholder="Domain ID(e.g. xyang)" ng-model="submitter">
+		</div>
+		<div class="col-xs-8 form-group">
+			<label for="shortDesc">Short Desc.:</label>
+    		<input type="text" class="form-control" id="shortDesc" placeholder="Issue Id or function description" ng-model="shortDesc">
+		</div>
+	</div>
+	<div class="row" ng-show="isCVStoLink">
+		<div class="col-xs-12 form-group">
+			<button type="button" class="btn btn-primary" ng-click="submitLink()">Send to Support!</button>
+		</div>
+	</div>
 </div>
-
 
 <div class="container">
 	<nav class="navbar navbar-default navbar-fixed-bottom">
