@@ -5,8 +5,8 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 		controller : 'ProjectCtrl'
 	});
 } ])
-.controller('ProjectCtrl', ['$scope', '$routeParams', 'Project',
-	function($scope, $routeParams, Project) {
+.controller('ProjectCtrl', ['$scope', '$routeParams', 'Project', 'LinkFileGenerator', 
+	function($scope, $routeParams, Project, LinkFileGenerator) {
 		$scope.funcNames = [{
 			"funcName" : "CVStoLink"
 		}, {
@@ -16,6 +16,16 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 		}, {
 			"funcName" : "ReConvert"
 		}];
+		$scope.funcName = "CVStoLink";
+		$scope.isCVStoLink = true;
+		$scope.inputtext = "";
+		$scope.outputtext = "";
+		$scope.emptySubmitter=false;
+		$scope.emptyShortDesc=false;
+		$scope.emptyLinkInfo=false;
+		$scope.submitterEmptyMsg="Submitter is empty!";
+		$scope.shortDescEmptyMsg="Short Description is empty!";
+		$scope.linkInfoEmptyMsg="Link info is empty!";
 		
 		$scope.setFuncName = function (funcName){
 			$scope.funcName = funcName;
@@ -23,11 +33,11 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 				$scope.isCVStoLink = true;
 			} else {
 				$scope.isCVStoLink = false;
+				$scope.emptySubmitter=false;
+				$scope.emptyShortDesc=false;
+				$scope.emptyLinkInfo=false;
 			}
 		}
-		
-		$scope.funcName = $scope.funcNames[0].funcName;
-		$scope.isCVStoLink = true;
 		$scope.projects = Project.query(function() {
 			$scope.projectId = "";
 			for (var i = 0; i < $scope.projects.length; i++) {
@@ -42,9 +52,6 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 				window.location = "#/welcome";
 			}
 		});
-		
-		$scope.inputtext = "";
-		$scope.outputtext = "";
 		$scope.convertText = function(){
 			switch($scope.funcName){
 			case "CVStoLink":
@@ -62,7 +69,44 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 			}
 		}
 		$scope.submitLink = function(){
-			
+			$scope.emptySubmitter=false;
+			$scope.emptyShortDesc=false;
+			$scope.emptyLinkInfo=false;
+			var hasError = false;
+			if(trimStr($scope.submitter)==""){
+				$scope.emptySubmitter=true;
+				$scope.hasError=true;
+			}
+			if(trimStr($scope.shortDesc)==""){
+				$scope.emptyShortDesc=true;
+				$scope.hasError=true;
+			}
+			if(trimStr($scope.outputtext)==""){
+				$scope.emptyLinkInfo=true;
+				$scope.hasError=true;
+			}
+			if(hasError){
+				return;
+			}
+			if(confirm("Really send?")==true){
+				//submit the form
+				var nowTime = new Date();
+				var nowYear = nowTime.getFullYear();
+				var nowMonth = nowTime.getMonth() < 10 ? '0' + (nowTime.getMonth()+1) : (nowTime.getMonth()+1);
+				var nowDate = nowTime.getDate() < 10 ? '0' + nowTime.getDate() : nowTime.getDate();
+				var dateText = nowYear+nowMonth+nowDate;
+				var fileName = dateText+'_'+$scope.submitter+'_'+$scope.shortDesc.replace(/(^\s*)|(\s*$)/g, "").replace(/\s/g, "_")+'_'+nowTime.getTime()+'.txt';
+				LinkFileGenerator.save({
+					fileName: fileName,
+					projectId: $scope.projectId,
+					linkInfo: $scope.outputtext,
+					mailTo: $scope.mailTo,
+					mailCc: $scope.mailCc
+				}, function(response){
+					$scope.message = response.message;
+					
+				});
+			}
 		}
 	} ]);
 

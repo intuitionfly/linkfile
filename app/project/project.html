@@ -15,22 +15,35 @@
 	<div class="row">
 		<div class="label label-primary">{{funcName}}</div>
 	</div>
-	<div class="row">
-		<textarea name="output" id="output" width="100%" rows="10" ng-model="outputtext" value="{{outputtext}}" class="col-xs-12" readonly="true"></textarea>
+	<div class="row" ng-class="{true: 'has-error', false: ''}[emptyLinkInfo]">
+		<textarea name="output" id="output" width="100%" rows="10" ng-model="outputtext" value="{{outputtext}}" class="col-xs-12 form-control" readonly="true"></textarea>
+		<div ng-class="{true: 'col-xs-12 form-group alert alert-danger', false: 'col-xs-12 form-group'}[emptyLinkInfo]" role="alert" ng-show="emptyLinkInfo">
+			<p>{{linkInfoEmptyMsg}}</p>
+		</div>
+	</div>
+	<div class="row" ng-show="isCVStoLink">
+		<div ng-class="{true: 'col-xs-4 form-group has-error', false: 'col-xs-4 form-group'}[emptySubmitter]">
+			<label for="submitter">Submitter:</label>
+    		<input type="text" class="form-control" id="submitter" placeholder="Domain ID(e.g. xyang)" ng-model="submitter">
+    		<div ng-class="{true: 'col-xs-12 form-group alert alert-danger', false: 'col-xs-12 form-group'}[emptySubmitter]" role="alert" ng-show="emptySubmitter">
+				<p>{{submitterEmptyMsg}}</p>
+			</div>
+		</div>
+		<div ng-class="{true: 'col-xs-8 form-group has-error', false: 'col-xs-8 form-group'}[emptyShortDesc]">
+			<label for="shortDesc">Short Desc.:</label>
+    		<input type="text" class="form-control" id="shortDesc" placeholder="Issue Id or function description" ng-model="shortDesc">
+    		<div ng-class="{true: 'col-xs-12 form-group alert alert-danger', false: 'col-xs-12 form-group'}[emptyShortDesc]" role="alert" ng-show="emptyShortDesc">
+				<p>{{shortDescEmptyMsg}}</p>
+			</div>
+		</div>
 	</div>
 	<div class="row" ng-show="isCVStoLink">
 		<div class="col-xs-4 form-group">
-			<label for="submitter">Submitter:</label>
-    		<input type="text" class="form-control" id="submitter" placeholder="Domain ID(e.g. xyang)" ng-model="submitter">
+			<button type="button" class="btn btn-primary" ng-click="submitLink()">Send to Support!</button>
 		</div>
 		<div class="col-xs-8 form-group">
-			<label for="shortDesc">Short Desc.:</label>
-    		<input type="text" class="form-control" id="shortDesc" placeholder="Issue Id or function description" ng-model="shortDesc">
-		</div>
-	</div>
-	<div class="row" ng-show="isCVStoLink">
-		<div class="col-xs-12 form-group">
-			<button type="button" class="btn btn-primary" ng-click="submitLink()">Send to Support!</button>
+			<input type="file" name="file" id="file" multiple/>
+			
 		</div>
 	</div>
 </div>
