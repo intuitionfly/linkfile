@@ -1,7 +1,7 @@
 angular.module('linkfile.welcome', [ 'ngRoute', 'projectServices' ])
 .config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/welcome', {
-		templateUrl : 'welcome/welcome.html',
+		templateUrl : '/welcome/welcome.html',
 		controller : 'WelcomeCtrl'
 	});
 } ])

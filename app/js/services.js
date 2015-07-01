@@ -6,5 +6,5 @@ projectServices.factory('Project', ['$resource',
 	}]);
 projectServices.factory('LinkFileGenerator', ['$resource',
 	function($resource){
-	  return $resource('/linkfile/submit');
+	  return $resource('/submitLinkInfo');
 	}]);
