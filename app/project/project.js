@@ -23,6 +23,7 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 		$scope.emptySubmitter=false;
 		$scope.emptyShortDesc=false;
 		$scope.emptyLinkInfo=false;
+		$scope.fileGenerated=false;
 		$scope.submitterEmptyMsg="Submitter is empty!";
 		$scope.shortDescEmptyMsg="Short Description is empty!";
 		$scope.linkInfoEmptyMsg="Link info is empty!";
@@ -36,7 +37,9 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 				$scope.emptySubmitter=false;
 				$scope.emptyShortDesc=false;
 				$scope.emptyLinkInfo=false;
+				$scope.fileGenerated=false;
 			}
+			$scope.convertText();
 		}
 		$scope.projects = Project.query(function() {
 			$scope.projectId = "";
@@ -55,7 +58,11 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 		$scope.convertText = function(){
 			switch($scope.funcName){
 			case "CVStoLink":
-				$scope.outputtext = cvsLogToLinklist($scope.inputtext);
+				if($scope.oriOutput){
+					$scope.outputtext = $scope.inputtext;
+				}else{
+					$scope.outputtext = cvsLogToLinklist($scope.inputtext);
+				}
 				break;
 			case "UniCode":
 				$scope.outputtext = unicode($scope.inputtext);
@@ -102,9 +109,14 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 					linkInfo: $scope.outputtext,
 					mailTo: $scope.mailTo,
 					mailCc: $scope.mailCc
-				}, function(response){
-					$scope.message = response.message;
-					
+				}, function(res){
+					$scope.genFilePath = res.absoluteFilePath;
+					$scope.fileGenerated = true;
+					//send email
+					var subject = $scope.projectId + ' - ' + $scope.shortDesc;
+					var body = ("Link File Request: "+fileName);
+					$scope.mailto = "mailto:" + $scope.mailTo + "?subject=" +subject+"&cc=" +$scope.mailCc+"&body=" +body;
+					window.open($scope.mailto);
 				});
 			}
 		}

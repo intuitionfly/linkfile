@@ -38,12 +38,28 @@
 		</div>
 	</div>
 	<div class="row" ng-show="isCVStoLink">
-		<div class="col-xs-4 form-group">
+		<div class="col-xs-6 form-group">
 			<button type="button" class="btn btn-primary" ng-click="submitLink()">Send to Support!</button>
 		</div>
-		<div class="col-xs-8 form-group">
-			
-			
+		<div class="col-xs-6 form-group">
+			<label>
+		    	<input type="checkbox" ng-model="oriOutput" ng-click="convertText()"> Original output
+		    </label>
+		</div>
+		
+	</div>
+	<div class="row" ng-show="isCVStoLink">
+		<div class="col-xs-12 form-group">
+			<div class="alert alert-success" role="alert" ng-show="fileGenerated">
+				File generated: <a href="{{genFilePath}}" class="alert-link">{{genFilePath}}</a>
+			</div>
+		</div>
+	</div>
+	<div class="row" ng-show="isCVStoLink">
+		<div class="col-xs-12 form-group">
+			<div class="alert alert-info" role="alert" ng-show="fileGenerated">
+				If the email didn't popup automatically, click <a href="{{mailto}}" class="alert-link">here</a> to resend.
+			</div>
 		</div>
 	</div>
 </div>

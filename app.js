@@ -4,10 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
+var fs = require('fs');
 var app = express();
 
 // view engine setup
@@ -23,8 +20,28 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'app')));
 
-app.use('/', routes);
-app.use('/users', users);
+app.get('/browserUpgrade', function (req, res) {
+    res.sendfile('app/browserUpgrade.html');
+});
+
+app.post('/submitLinkInfo', function (req, res) {
+	console.log("started.");
+	var project = req.body.projectId;
+	var linkInfo = req.body.linkInfo;
+	var filename = req.body.fileName;
+	var To = req.body.mailTo;
+	var Cc = req.body.mailCc;
+	var filePath = "d:\\testfolder\\"+project+"\\";
+	var absoluteFilePath = "\\\\cvslink.premiumit-cn.com\\Project_Issues_List\\"+project+"\\";
+	var fullFileName = filePath+filename;
+	
+	fs.writeFile(fullFileName , linkInfo, encoding='utf8', function(err){
+		if (err) throw err;
+		console.log("Link file wrote successfully: "+ fullFileName);
+		res.send({'absoluteFilePath': absoluteFilePath+filename});
+	});
+	
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -59,14 +76,6 @@ app.use(function(err, req, res, next) {
 
 app.get('/', function (req, res) {
     res.sendfile('app/index.html');
-});
-
-app.post('/submitLinkInfo', function(req, res){
-	console.log("started.");
-	
-	
-	//res.set({'Content-Type':'text/json','Encodeing':'utf8'});  
-	//res.send({status:"success",url:"/linkfile/"});
 });
 
 module.exports = app;
