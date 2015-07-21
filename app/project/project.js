@@ -82,15 +82,15 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 			var hasError = false;
 			if(trimStr($scope.submitter)==""){
 				$scope.emptySubmitter=true;
-				$scope.hasError=true;
+				hasError=true;
 			}
 			if(trimStr($scope.shortDesc)==""){
 				$scope.emptyShortDesc=true;
-				$scope.hasError=true;
+				hasError=true;
 			}
 			if(trimStr($scope.outputtext)==""){
 				$scope.emptyLinkInfo=true;
-				$scope.hasError=true;
+				hasError=true;
 			}
 			if(hasError){
 				return;
@@ -102,22 +102,34 @@ angular.module('linkfile.project', [ 'ngRoute', 'projectServices' ])
 				var nowMonth = nowTime.getMonth() < 10 ? '0' + (nowTime.getMonth()+1) : (nowTime.getMonth()+1);
 				var nowDate = nowTime.getDate() < 10 ? '0' + nowTime.getDate() : nowTime.getDate();
 				var dateText = nowYear+nowMonth+nowDate;
-				var fileName = dateText+'_'+$scope.submitter+'_'+$scope.shortDesc.replace(/(^\s*)|(\s*$)/g, "").replace(/\s/g, "_")+'_'+nowTime.getTime()+'.txt';
+				var timeText = nowTime.getTime();
+				var fileName = dateText+'_'+$scope.submitter+'_'+$scope.shortDesc.replace(/(^\s*)|(\s*$)/g, "").replace(/\s+|[\\:\/\*\?\"<>\|]/g, "_")+'_'+timeText+'.txt';
 				LinkFileGenerator.save({
 					fileName: fileName,
 					projectId: $scope.projectId,
 					linkInfo: $scope.outputtext,
 					mailTo: $scope.mailTo,
-					mailCc: $scope.mailCc
-				}, function(res){
-					$scope.genFilePath = res.absoluteFilePath;
-					$scope.fileGenerated = true;
-					//send email
-					var subject = $scope.projectId + ' - ' + $scope.shortDesc;
-					var body = ("Link File Request: "+fileName);
-					$scope.mailto = "mailto:" + $scope.mailTo + "?subject=" +subject+"&cc=" +$scope.mailCc+"&body=" +body;
-					window.open($scope.mailto);
-				});
+					mailCc: $scope.mailCc,
+					shortDesc: $scope.shortDesc,
+					submitter: $scope.submitter,
+					dateText: dateText,
+					timeText: timeText
+				}).$promise.then(
+					//success
+					function( value ){
+			    		$scope.genFilePath = value.absoluteFilePath;
+						$scope.fileGenerated = true;
+						//send email
+						var subject = $scope.projectId + ' - ' + $scope.shortDesc;
+						var body = ("Link File Request: "+fileName);
+						$scope.mailto = "mailto:" + $scope.mailTo + "?subject=" +subject+"&cc=" +$scope.mailCc+"&body=" +body;
+						window.open($scope.mailto);
+					},
+					//error
+					function( error ){
+			    		alert("Fail to submit the link info! Please contact support team for help!");
+					}
+			   );
 			}
 		}
 	} ]);

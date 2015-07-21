@@ -35,10 +35,25 @@ app.post('/submitLinkInfo', function (req, res) {
 	var absoluteFilePath = "\\\\cvslink.premiumit-cn.com\\Project_Issues_List\\"+project+"\\";
 	var fullFileName = filePath+filename;
 	
+	console.log("project:"+project);
+	console.log("linkInfo:"+linkInfo);
+	console.log("filename:"+filename);
+	console.log("mailTo:"+To);
+	console.log("mailCc:"+Cc);
+	console.log("filePath:"+filePath);
+	console.log("fullFileName:"+fullFileName);
+	console.log("shortDesc:"+req.body.shortDesc);
+	console.log("submitter:"+req.body.submitter);
+	console.log("dateText:"+req.body.dateText);
+	console.log("timeText:"+req.body.timeText);
+	
 	fs.writeFile(fullFileName , linkInfo, encoding='utf8', function(err){
-		if (err) throw err;
-		console.log("Link file wrote successfully: "+ fullFileName);
-		res.send({'absoluteFilePath': absoluteFilePath+filename});
+		if (err){
+			res.status(400).send('Bad Request');
+		}else{
+			console.log("Link file wrote successfully: "+ fullFileName);
+			res.send({'absoluteFilePath': absoluteFilePath+filename});
+		}
 	});
 	
 });
